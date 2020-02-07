@@ -1,4 +1,4 @@
 module.exports = {
   port: 9090,
-  secret: 'itLooksFun'
+  secret: 'sdkfniniefi4jdk'
 }

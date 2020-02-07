@@ -1,12 +1,13 @@
 import axios from "axios";
 import * as Constants from "../constants/constant";
 
+
+
 function login(data, callBack) {
-  console.log(Constants.BASE_URL + "/api/user/login");
+  const HEADER = Constants.header();
   axios
-    .post(Constants.BASE_URL + "/api/user/login", data)
+    .post(Constants.BASE_URL + "/api/user/login", data, {headers : HEADER})
     .then(res => {
-      console.log("res",res);
       if(res.status === 200){
         callBack(res);
       }

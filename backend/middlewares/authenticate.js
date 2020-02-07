@@ -2,13 +2,13 @@ const jwt = require("jsonwebtoken");
 const tokenInfo = require("../configs/index")
 
 module.exports = function(req, res, next){
-  console.log("authentication ",req.body);
   let token;
   if(req.headers['x-access-token']) {
     token = req.headers['x-access-token'];
   }
   if(req.headers['authorization']) {
-    token = req.headers['authorization'];
+    let tokenInfo = req.headers.authorization.split(' ');
+    token = tokenInfo[1];
   }
   if(req.headers['token']) {
     token = req.headers['token'];
@@ -17,13 +17,11 @@ module.exports = function(req, res, next){
     token = req.query['token'];
   }
   if(token){
-    jwt.verify(token, tokenInfo.secret, function(err, done){
-      console.log('hello from token room :>>', token);
+    jwt.verify(token, "lfTechnology", function(err, authData){
       if(err){
-        return next({err});
+        next({err});
       }
-      console.log('Token decoded > ', done);
-      return next();
+      next();
     })
   } else {
     next({

@@ -3,23 +3,27 @@ import Axios from "axios";
 import * as Constants from "../../constants/constant";
 
 export default class Home extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       userList: []
     };
   }
+  
   logout = () => {
     localStorage.clear();
     this.props.history.push("/api/user/login");
   };
+
   componentDidMount = () => {
-    Axios.get(Constants.BASE_URL + Constants.BASE_URL_USER)
+    Axios.get(Constants.BASE_URL + Constants.BASE_URL_USER, {headers: {
+      "Authorization" : `Barier ${localStorage.getItem('token')}`
+    }})
       .then(res => {
         this.setState({ userList: res.data.result });
       })
       .catch(err => {
-        console.log('From error', err);
+        
       });
   };
 
@@ -32,9 +36,9 @@ export default class Home extends React.Component {
       JSON.parse(localStorage.getItem("user")) || {};
     return (
       <>
-        <h2>This is home page</h2>
+        <h2>Contact list</h2>
         <h2>{`Welcome ${fName} ${lName}...`}</h2>
-        <table>
+        <table border='1'>
           <thead>
             <tr>
               <th>S.N</th>
@@ -46,10 +50,9 @@ export default class Home extends React.Component {
           </thead>
           <tbody>
             {this.state.userList.map(user => {
-              console.log("user",user)
               return(<tr key = {count}>
                 <td>{count++}</td>
-                <td>{user.fName + user.lName}</td>
+                <td>{user.fName + ' '+ user.lName}</td>
                 <td>{user.userName}</td>
                 <td>{user.email}</td>
                 <td>{user.role}</td>

@@ -1,64 +1,68 @@
 function validateForm(data, callBack) {
   const validator = {
-    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    password: /(^[a-zA-Z]).{5,20}/,
+    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    password: /^(^[a-zA-Z_]).{5,20}$/,
     userName: /^([a-zA-Z])[a-zA-Z0-9]{3,20}$/,
     name: /^[a-zA-Z]{2,}$/
   };
   
   let keys = Object.keys(data);
+  let validationSuccess = true;
   let message = {};
   keys.forEach(element => {
-    // console.log('<------------------------------------------>', element)
     switch (element) {
       case "userName": {
-        // console.log("validate username", validator[element].test(data[element]));
         if (validator[element].test(data[element]) !== true) {
           message.errUserName =
             "User name must contain atleast 4 character with or without numbers only";
+            validationSuccess = false;
         }
         break;
       }
       case "password": {
-        // console.log("validate password", validator[element].test(data[element]));
         if (validator[element].test(data[element]) !== true) {
           message.errPassword =
-            "Password cannot be empty and lower than 8 characters";
+            "Password cannot be empty and lower than 6 characters and starts with alphabetic or '_";
+          validationSuccess = false;
+        }
+        break;
+      }
+      case "rePassword": {
+        if (data[element] !== data['password']) {
+          message.errRePassword =
+            "Password didn't match with previous one";
+          validationSuccess = false;
         }
         break;
       }
       case "email": {
-        // console.log("validate email",validator[element].test(data[element]));
         if (validator[element].test(data[element]) !== true) {
           message.errEmail = "Invalid Email address.";
+          validationSuccess = false;
         }
         break;
       }
       case "fName": {
-        // console.log("validate fName",validator[name].test(data[element]));
         if (validator.name.test(data[element]) !== true) {
-          message.errFirstName = "Invalid first name";
+          message.errFName = "Name cannot be empty and must contain only alphabetic";
+          validationSuccess = false;
         }
         break;
       }
       case "lName": {
-        // console.log("validate lName",validator[name].test(data[element]));
         if (validator.name.test(data[element]) !== true) {
-          message.errLastName = "Invalid last name";
+          message.errLName = "Name cannot be empty and must contain only alphabetic";
+          validationSuccess = false;
         }
         break;
       }
       default: {
-        // man wrong fieldname than database so correct it
-        console.log("this message from default");
-        if (validator[element].test(data[element]) !== true) {
-          message.errEmail = "Invalid Email address.";
-        }
+        console.log("this message from default for element ::", element);
         break;
       }
     }
   });
-  callBack(message);
+  callBack(validationSuccess, message);
 }
 
 module.exports = { validateForm };

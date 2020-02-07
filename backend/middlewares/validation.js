@@ -16,7 +16,7 @@ module.exports = function validation(req, res, next) {
 function validateForm(data, callBack) {
   const validator = {
     email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    password: /(^[a-zA-Z]).{5,20}/,
+    password: /^(^[a-zA-Z_]).{5,20}$/,
     userName: /^([a-zA-Z])[a-zA-Z0-9]{3,20}$/,
     name: /^[a-zA-Z]{2,}$/
   };
