@@ -1,12 +1,13 @@
 let mysql = require("mysql");
 let connectionParam = {
-  host: "10.10.4.126",
-  user: "zeno",
-  password: "PAss@1@2",
+  host: "db",
+  user: "root",
+  password: "ROot@123",
   database: "nodeapp"
 };
 let conn = null;
 
+//dbuser zeno pass PAss@1@2
 function connectToDB(){
   try{
     conn = mysql.createConnection(connectionParam);

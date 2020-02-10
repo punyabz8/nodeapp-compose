@@ -1,17 +1,36 @@
 version: "3"
 services:
   frontend:
+    container_name: nodeapp-frontend
     build:
       context: ./frontend      
     ports: 
                - "3000:80"
   backend:
+    container_name: nodeapp-backend
     ports: 
                 - "9090:9090"
     build:
       context: ./backend            
     volumes:
             - backend:/app
-
+              #depends_on: 
+              #- db
+              #privileged: true
+  db:
+    container_name: nodeapp-db
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: ROot@123  
+      MYSQL_DATABASE: nodeapp
+    
+    ports:
+            - "3306:3306"
+    expose:
+            - "3306"
 volumes:
-        backend:
+  backend:

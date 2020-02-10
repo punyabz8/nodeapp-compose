@@ -13,13 +13,24 @@ function selectAll(userCallBack) {
 }
 
 function insert(data, userCallBack) {
+  console.log(conn);
   if(conn === null){
-    conn = connectToDB();
+    try{
+      conn = connectToDB();}
+    catch(e){
+      console.log("connection err", e);
+    }
   }
   mySqlQuery = queryGenerator.insert("user", data);
-  conn.query(mySqlQuery, function(err, done) {
-    err ? userCallBack(err, err) : userCallBack(err, done);
-  });
+  try{
+    conn.query(mySqlQuery, function(err, done) {
+      err ? userCallBack(err, err) : userCallBack(err, done);
+    });
+
+  }
+  catch(e){
+    console.log('Error in data insertion :', e);
+  }
 }
 
 function updateById(data, id, userCallBack) {
@@ -54,7 +65,7 @@ function login(email, userCallBack) {
     try{
       conn = connectToDB();
     } catch (e){
-      
+      console.log('error connection with db',e);
     }
   } 
   mySqlQuery = queryGenerator.selectByEmail("user", email);
@@ -65,7 +76,7 @@ function login(email, userCallBack) {
       userCallBack(err, result);
     }
   });
-  
+  conn.close();
 }
 
 module.exports = { selectAll, insert, deleteById, updateById, login };
